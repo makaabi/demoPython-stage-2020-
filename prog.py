@@ -1,4 +1,6 @@
 from tkinter import * 
+from tkinter import ttk
+
 from functools import partial
 import mysql.connector
 
@@ -39,12 +41,73 @@ def get_plans():
         plans.append(plan)
     return plans
   
+def ajoutPlan(msg,nomval,detailval,dateval):
+    plan = {
+        'lib':nomval.get(),
+        'detail':detailval.get(),
+        'date': dateval.get()
+        }
+    plans.append(plan)
+    add_plan( nomval.get(),detailval.get(), dateval.get())
+    
+    msg.grid(row=5,column=2)
 
 def ajouterInterface():
-    print("ajouter")
+    clearframe2grid()
+    frameajout = Frame(frame2)
+    frameajout.grid(row=2,column=2, padx=100,pady=40)
+
+    titre=Label(frame2,text=" Ajouter un plan",bg="white",fg="black",font=("Arial ", 10,"bold"),width=15)
+    titre.grid(row=1,column=2, padx=200,pady=10)
+
+    nomlib=Label(frameajout,text="plan",fg="black",font=("Times",12))
+    nomval=Entry(frameajout)
+    detailib=Label(frameajout,text="details",fg="black",font=("Times",12))
+    detailval=Entry(frameajout)
+    datelib=Label(frameajout,text="date(YYYY-MM-DD)",fg="black",font=("Times",12))
+    dateval=Entry(frameajout)
+    msg=Label(frameajout,text="Plan Ajoute",fg="green",font=("Verdana", 9))
+    button1=Button(frameajout,text="Ajouter",bg="blue",fg="white",width=10,command=partial(ajoutPlan,msg,nomval,detailval,dateval))
+
+    nomlib.grid(row=2,column=2, padx=20,pady=12)
+    nomval.grid(row=2,column=3, padx=20,pady=12)
+    detailib.grid(row=3,column=2, padx=20,pady=12)
+    detailval.grid(row=3,column=3, padx=20,pady=12)
+    datelib.grid(row=4,column=2, padx=20,pady=12)
+    dateval.grid(row=4,column=3, padx=20,pady=5)
+    
+    button1.grid(row=5,column=3)
+
 
 def afficherInterface():
-    plans=get_plans()
+    
+    
+
+    framelis = Frame(frame2)
+    framelis.grid(row=2,column=2, padx=20)
+
+    tree =ttk.Treeview(framelis, columns = (1,2,3), height = 10, show = "headings")
+    tree.pack(side = 'left')
+
+    tree.heading(1, text="Plan ")
+    tree.heading(2, text="Detail")
+    tree.heading(3, text="Date")
+
+    tree.column(1, width = 100)
+    tree.column(2, width = 300)
+    tree.column(3, width = 120)
+
+    scroll = ttk.Scrollbar(framelis, orient="vertical", command=tree.yview)
+    scroll.pack(side = 'right', fill = 'y')
+
+    tree.configure(yscrollcommand=scroll.set)
+
+    for val in plans:
+        tree.insert('', 'end', values = (val['lib'], val['detail'], val['date']) )
+
+
+
+    
     titre2=Label(frame2,text=" Plans",bg="white",fg="black",font=("Arial ", 10,"bold"),width=15)
 
     titre2.grid(row=1,column=2, padx=200)
@@ -62,7 +125,7 @@ def placeMenu():
     
     fenetre.geometry("800x350+500+200")
     clearfenetregrid()
-    titre=Label(fenetre,text="Gestion de planning",fg="blue",width=30,font=("Arial ", 10,"bold"),pady=7)
+    titre=Label(fenetre,text="demo ERP",fg="blue",width=30,font=("Arial ", 10,"bold"),pady=7)
     titre.grid(row=0,column=2)
 
     
@@ -84,9 +147,14 @@ def clearfenetregrid():
     for l in list:
         l.destroy()
 
+def clearframe2grid():
+    list = frame2.grid_slaves()
+    for l in list:
+        l.destroy()
+
 
 def placetopgrid():
-    titre=Label(fenetre,text="Gestion de planning",fg="grey",width=30,font=("Arial ", 10,"bold"),pady=7)
+    titre=Label(fenetre,text="demo ERP",fg="grey",width=30,font=("Arial ", 10,"bold"),pady=7)
     titre.grid(row=0,column=1)
 
 def placeLogin():
@@ -118,6 +186,7 @@ def login():
 
 fenetre = Tk()
 fenetre.geometry("320x130+500+200")
+plans=get_plans()
 frame1 =Frame(fenetre, height = 100, width = 100,borderwidth=2)
 frame2 =Frame(fenetre, height = 300, width = 575, bg = "WHITE", borderwidth=2,highlightbackground="black", highlightthickness=1)
 frame2.grid_propagate(0)
