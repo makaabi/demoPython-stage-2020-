@@ -24,23 +24,39 @@ def add_plan(lib,detail,date):
 
 
 def get_plans():
+    plans=[]
     sql = ("SELECT * FROM planing")
     cursor.execute(sql)
     result = cursor.fetchall()
 
     for row in result:
-        print(row[2])
+        plan = {
+        'lib':row[1],
+        'detail':row[2],
+        'date': row[3]
+        }
+
+        plans.append(plan)
+    return plans
+  
 
 def ajouterInterface():
     print("ajouter")
 
 def afficherInterface():
-    print("afficher")
+    plans=get_plans()
+    titre2=Label(frame2,text="Liste Plan",bg="green",fg="black",width=40)
+
+    titre2.grid(row=1,column=2)
+   
+       
+
+
+
     
 def calenderInterface():
     print("calender")
     
-
 def placeMenu():
     
     fenetre.geometry("800x350+500+200")
@@ -48,20 +64,17 @@ def placeMenu():
     titre=Label(fenetre,text="Gestion de planning",fg="grey",width=30,font=("Arial ", 10,"bold"),pady=7)
     titre.grid(row=0,column=2)
 
-    frame1 =Frame(fenetre, height = 100, width = 100, bg = "WHITE", borderwidth=2)
-    frame2 =Frame(fenetre, height = 300, width = 575, bg = "WHITE", borderwidth=2,highlightbackground="black", highlightthickness=1)
+    
 
     BT1=Button(frame1,text="Ajoutez un planning",command=ajouterInterface,bg="black",fg="white",width=20,font=("Verdana", 9),padx=9, pady=9)
-    BT2=Button(frame1,text="liste planning",command=afficherInterface,bg="black",fg="white",width=20,font=("Verdana", 9),padx=9, pady=9)
-    BT3=Button(frame1,text="calendar",command=calenderInterface,bg="black",fg="white",width=20,font=("Verdana", 9),padx=9, pady=9)
+    BT2=Button(frame1,text="Liste planning",command=afficherInterface,bg="black",fg="white",width=20,font=("Verdana", 9),padx=9, pady=9)
+    BT3=Button(frame1,text="Calendar",command=calenderInterface,bg="black",fg="white",width=20,font=("Verdana", 9),padx=9, pady=9)
 
 
-    BT1.pack()
-    BT2.pack()
-    BT3.pack()
-    #BT1.grid(row=1,column=1)
-    #BT2.grid(row=2,column=1)
-    #BT3.grid(row=3,column=1)
+ 
+    BT1.grid(row=1,column=1)
+    BT2.grid(row=2,column=1)
+    BT3.grid(row=3,column=1)
     frame1.grid(row=1,column=1)
     frame2.grid(row=1,column=2)
 
@@ -104,6 +117,8 @@ def login():
 
 fenetre = Tk()
 fenetre.geometry("320x130+500+200")
+frame1 =Frame(fenetre, height = 100, width = 100, bg = "WHITE", borderwidth=2)
+frame2 =Frame(fenetre, height = 300, width = 575, bg = "WHITE", borderwidth=2,highlightbackground="black", highlightthickness=1)
 entry_1=Entry(fenetre,show="*")
 erreur=Label(fenetre,text="mot de passe incorrect",fg="red")
 placeLogin()
