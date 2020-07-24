@@ -45,9 +45,10 @@ def ajouterInterface():
 
 def afficherInterface():
     plans=get_plans()
-    titre2=Label(frame2,text="Liste Plan",bg="green",fg="black",width=40)
+    titre2=Label(frame2,text=" Plans",bg="white",fg="black",font=("Arial ", 10,"bold"),width=15)
 
-    titre2.grid(row=1,column=2)
+    titre2.grid(row=1,column=2, padx=200)
+    
    
        
 
@@ -61,7 +62,7 @@ def placeMenu():
     
     fenetre.geometry("800x350+500+200")
     clearfenetregrid()
-    titre=Label(fenetre,text="Gestion de planning",fg="grey",width=30,font=("Arial ", 10,"bold"),pady=7)
+    titre=Label(fenetre,text="Gestion de planning",fg="blue",width=30,font=("Arial ", 10,"bold"),pady=7)
     titre.grid(row=0,column=2)
 
     
@@ -72,10 +73,10 @@ def placeMenu():
 
 
  
-    BT1.grid(row=1,column=1)
-    BT2.grid(row=2,column=1)
-    BT3.grid(row=3,column=1)
-    frame1.grid(row=1,column=1)
+    BT1.grid(row=1,column=1,pady=15)
+    BT2.grid(row=2,column=1,pady=15)
+    BT3.grid(row=3,column=1,pady=15)
+    frame1.grid(row=1,column=1,padx=5)
     frame2.grid(row=1,column=2)
 
 def clearfenetregrid():
@@ -117,8 +118,9 @@ def login():
 
 fenetre = Tk()
 fenetre.geometry("320x130+500+200")
-frame1 =Frame(fenetre, height = 100, width = 100, bg = "WHITE", borderwidth=2)
+frame1 =Frame(fenetre, height = 100, width = 100,borderwidth=2)
 frame2 =Frame(fenetre, height = 300, width = 575, bg = "WHITE", borderwidth=2,highlightbackground="black", highlightthickness=1)
+frame2.grid_propagate(0)
 entry_1=Entry(fenetre,show="*")
 erreur=Label(fenetre,text="mot de passe incorrect",fg="red")
 placeLogin()
