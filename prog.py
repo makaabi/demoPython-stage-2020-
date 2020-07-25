@@ -1,5 +1,6 @@
 from tkinter import * 
 from tkinter import ttk
+from PIL import Image, ImageTk
 
 from functools import partial
 import mysql.connector
@@ -115,17 +116,76 @@ def afficherInterface():
    
        
 
+def CalenderAffiche(mois,moisnom):
+    plansm=[]
+    sql = ("SELECT * FROM planing where MONTH(date_plan)=%s")
+    cursor.execute(sql, (mois,))
+    result = cursor.fetchall()
+    for row in result:
+        plan = {
+        'lib':row[1],
+        'detail':row[2],
+        'date': row[3]
+        }
 
+        plansm.append(plan)
+
+    frameliscal = Frame(frame2)
+    frameliscal.grid(row=2,column=2, padx=20)
+    titrelib=Label(frame2,text="plan de "+moisnom,fg="black",font=("Times",12))
+    titrelib.grid(row=1,column=2, padx=20)
+
+    tree =ttk.Treeview(frameliscal, columns = (1,2), height = 10, show = "headings")
+    tree.pack(side = 'left')
+
+    tree.heading(1, text="Plan ")
+    tree.heading(2, text="Date")
+
+    tree.column(1, width = 150)
+    tree.column(2, width = 300)
+    scroll = ttk.Scrollbar(frameliscal, orient="vertical", command=tree.yview)
+    scroll.pack(side = 'right', fill = 'y')
+
+    tree.configure(yscrollcommand=scroll.set)
+
+    for val in plansm:
+        tree.insert('', 'end', values = (val['lib'], val['date']) )
 
     
 def calenderInterface():
-    print("calender")
+    clearframe2grid()
+    framecal = Frame(frame2,bg="white")
+    framecal.grid(row=2,column=2, padx=20)
+    image = Image.open("calen.png")
+    photo = ImageTk.PhotoImage(image)
+
+    calenimg = Label(framecal,image=photo,bg="white")
+
+    calenimg.image = photo 
+
+    calenimg.grid(row=2,column=2, padx=20)
+
+    calenimg2 = Label(framecal,image=photo,bg="white")
+
+    image2 = Image.open("calen.png")
+    photo2 = ImageTk.PhotoImage(image2)
+    calenimg2.image = photo2 
+
+    calenimg2.grid(row=2,column=3, padx=20)
+
+    libjan=Button(framecal,text="Janvier 2020",fg="black",font=("Times",12),command=partial(CalenderAffiche,1,"Janvier"))
+    libfeb=Button(framecal,text="Fevrier 2020",fg="black",font=("Times",12),command=partial(CalenderAffiche,2,"Fevrier"))
+    libjan.grid(row=3,column=2, padx=20)
+    libfeb.grid(row=3,column=3, padx=20)
+
+ 
+
     
 def placeMenu():
     
     fenetre.geometry("800x350+500+200")
     clearfenetregrid()
-    titre=Label(fenetre,text="demo ERP",fg="blue",width=30,font=("Arial ", 10,"bold"),pady=7)
+    titre=Label(fenetre,text="demo ERP",fg="grey",width=30,font=("Arial ", 10,"bold"),pady=7)
     titre.grid(row=0,column=2)
 
     
@@ -164,7 +224,7 @@ def placeLogin():
     entry_1.grid(row=1,column=1)
     
     button1=Button(fenetre,text="Connecter",command=login,bg="green",fg="white",width=15)
-    button1.grid(row=2,column=1)
+    button1.grid(row=2,column=1,padx=5)
 
 def login(): 
     passwordvalue = entry_1.get()
